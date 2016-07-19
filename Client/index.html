@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Family MMO</title>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'/>
+    <link rel='stylesheet' type='text/css' href='bootstrap.css'/>
+    <link rel='stylesheet' type='text/css' href='style.css'/>
+</head>
+<body>
+    <div class='container' id="signDiv">
+        <div class='row'>
+            <div class='col-lg-12'>
+                <h1 id='sign-title'>Welcome to Davids Amazing MMO</h1>
+                <p id='sign-text'>Please sign in or if you haven't signed up, please sign up</p>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-lg-3 formtext'>
+                Username: <input id="signDiv-username" type="text"></input><br>
+                Password: <input id="signDiv-password" type="password"></input>
+            </div>
+            <div class='col-lg-9'>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-lg-3>'>
+                <button class='btn btn-success btn-lg' id="signDiv-signIn">Sign In</button>
+                <button class='btn btn-primary btn-lg' id="signDiv-signUp">Sign Up</button>
+            </div>
+        </div>
+    </div>
+     
+    <div id="gameDiv" class='container' style="display:none;">
+        <div class='row'>
+            <div class=col-lg-12>
+                <div id='gamebox'>
+                    <canvas id="ctx" width="800" height="600" style="border:1px solid #000000;"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-lg-12'>
+                <h1 id='chat-title'>David Chat</h1>
+                <div id="chat-text" style="width:600px;height:100px;overflow-y:scroll">
+                    <div>Type Here!</div>
+                </div>
+     
+                <form id="chat-form">
+                    <input id="chat-input" type="text" style="width:600px"></input>
+                </form>
+            </div>
+        </div>
+    </div>
+     
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script src='/Client/client.js'></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+body {
+	background-image: url("Assets/Backgrounds/SignIn.jpg");
+
+}
+
+/* Sign in CSS */
+
+#sign-title {
+	color: white;
+	font-family: 'Roboto', sans-serif;
+	font-size: 40px;
+}
+
+#sign-text {
+	color: white;
+	font-family: 'Roboto', sans-serif;
+	font-size: 20px;
+}
+
+#signDiv-username, #signDiv-password {
+	font-size: 20px;
+	margin-bottom: 20px;
+	position: relative;
+	color: black;
+}
+
+.formtext {
+	font-family: 'Roboto', sans-serif;
+	font-size: 16px;
+	color: white;
+}
+
+/* Sign in Buttons */
+
+#signDiv-signIn, #signDiv-signUp {
+	position: relative; 
+	margin-left: 20px;
+}
+
+
+/* Chat Text CSS */
+
+#chat-title {
+	font-family: 'Roboto', sans-serif;
+	font-size: 30px;
+	color: white;
+}
+
+#chat-text {
+	background-color: lightblue;
+	font-family: 'Roboto', sans-serif;
+	font-size: 20px;
+	border: 1px solid black;
+
+}
+
+#chat-input {
+	font-size: 20px;
+}
+
+/* Game CSS */
+
+#gamebox {
+	text-align: center;
+	background-color: white;  
+}
