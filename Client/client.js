@@ -32,22 +32,11 @@
             alert("Sign up unsuccessful.");
     });
  
-    //game
+    // Chat
     var chatText = document.getElementById('chat-text');
     var chatInput = document.getElementById('chat-input');
     var chatForm = document.getElementById('chat-form');
-    var ctx = document.getElementById("ctx").getContext("2d");
-    ctx.font = '30px Arial';
-   
-       
-    socket.on('newPositions',function(data){
-        ctx.clearRect(0,0,width,height);
-        for(var i = 0 ; i < data.player.length; i++)
-            ctx.fillText(data.player[i].number,data.player[i].x,data.player[i].y);     
-           
-        for(var i = 0 ; i < data.bullet.length; i++)
-            ctx.fillRect(data.bullet[i].x-5,data.bullet[i].y-5,10,10);     
-    });
+
    
     socket.on('addToChat',function(data){
         chatText.innerHTML += '<div>' + data + '</div>';
@@ -65,6 +54,82 @@
             socket.emit('sendMsgToServer',chatInput.value);
         chatInput.value = '';      
     }
+
+    // Game
+    var ctx = document.getElementById("ctx").getContext("2d");
+    ctx.font = '30px Arial';
+
+    var Player = function(initPack) {
+        var self = {};
+        self.id = initPack.id;
+        self.number = initPack.number;
+        self.x = initPack.x;
+        self.y = initPack.y;
+        Player.list[self.id] = self;;
+        return self
+    }
+
+    Player.list = {};
+
+    var Bullet = function(initPack) {
+        var self = {};
+        self.id = initPack.id;
+        self.x = initPack.x;
+        self.y = initPack.y;
+        Bullet.list[self.id] = self;
+        return self;
+    }
+
+    Bullet.list =  {};
+       
+    socket.on('init',function(data){
+        for(var i = 0 ; i < data.player.length; i++)
+            new Player(data.player[i]);  
+           
+        for(var i = 0 ; i < data.bullet.length; i++)
+            new Bullet(data.bullet[i]);    
+    });
+
+    socket.on('update', function(data){
+        for(var i = 0; i < data.player.length; i++) {
+            var pack = data.player[i];
+            var p = Player.list[pack.id];
+            if(p) {
+                if(p.x !== undefined)
+                    p.x = pack.x;
+                if(p.y !== undefined)
+                    p.y = pack.y;
+            }
+        }
+        for (var i = 0; i < data.bullet.length; i++) {
+            var pack = data.bullet[i];
+            var b = Bullet.list[data.bullet[i].id];
+            if(b) {
+                if(b.x !== undefined)
+                    b.x = pack.x;
+                if(b.y !== undefined)
+                    b.y = pack.y;
+            }
+        }
+    });
+
+    socket.on('remove', function(data) {
+        for(var i = 0; i < data.player.length; i++) {
+            delete Player.list[data.player[i]];
+        }
+        for(var i = 0; i < data.bullet.length; i++) {
+            delete Bullet.list[data.bullet[i]];
+        }
+    });
+
+    setInterval(function(){
+    ctx.clearRect(0,0,width,height);
+    for(var i in Player.list)
+        ctx.fillText(Player.list[i].number,Player.list[i].x,Player.list[i].y);
+    for(var i in Bullet.list)
+        ctx.fillRect(Bullet.list[i].x-5,Bullet.list[i].y-5,10,10);
+    },40);
+   
    
     document.onkeydown = function(event){
         if(event.keyCode === 68)    //d
