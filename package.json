@@ -1,18 +1,19 @@
 {
-  "name": "gameserver",
+  "name": "project",
   "version": "1.0.0",
-  "description": "Server for game",
+  "description": "",
   "main": "app.js",
-  "dependancies": {
-  	"express": "^4.13.4",
-  	"socket.io": "^1.4.5"
+  "dependencies": {
+    "express": "^4.13.4",
+    "socket.io": "^1.4.5"
   },
   "engines": {
-  	"node": "4.1.x"
+    "node": "4.1.x"
   },
+  "devDependencies": {},
   "scripts": {
-    "start": "node app.js"
+	"start": "node app.js"
   },
-  "author": "David Holder",
+  "author": "",
   "license": "ISC"
 }
