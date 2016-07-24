@@ -56,7 +56,17 @@
     }
 
     // Game
-  var ctx = document.getElementById("ctx").getContext("2d");
+    var Img = {};
+    Img.player = new Image();
+    Img.player.src = 'Assets/Sprites/Hero1.png';
+    Img.bullet = new Image();
+    Img.bullet.src = 'Assets/Sprites/bullets.png';
+    Img.map = new Image();
+    Img.map.src = 'Assets/Backgrounds/Map1.png';
+
+    
+
+    var ctx = document.getElementById("ctx").getContext("2d");
     ctx.font = '30px Arial';
    
     var Player = function(initPack){
@@ -70,11 +80,19 @@
         self.score = initPack.score;
        
         self.draw = function(){
-            var hpWidth = 30 * self.hp / self.hpMax;
-            ctx.fillRect(self.x - hpWidth/2,self.y - 40,hpWidth,4);
-            ctx.fillText(self.number,self.x,self.y);
-           
-            ctx.fillText(self.score,self.x,self.y-60);
+            var x = self.x - Player.list[selfId].x + width/2;
+            var y = self.y - Player.list[selfId].y + height/2;
+            
+            var hpWidth = 48 * self.hp / self.hpMax;
+            ctx.fillStyle = 'red';
+            ctx.fillRect(x - hpWidth/2, y - 40,hpWidth,4);
+
+            var swidth = 48;
+            var sheight = 64;
+            
+            ctx.drawImage(Img.player, 32, 48, swidth, sheight, x - swidth/2, y - sheight/2, swidth, sheight);
+            
+            //ctx.fillText(self.score,self.x,self.y-60);
         }
        
         Player.list[self.id] = self;
@@ -92,7 +110,13 @@
         self.y = initPack.y;
        
         self.draw = function(){        
-            ctx.fillRect(self.x-5,self.y-5,10,10);
+            var swidth = 64;
+            var sheight = 64;
+
+            var x = self.x - Player.list[selfId].x + width/2;
+            var y = self.y - Player.list[selfId].y + height/2;
+
+            ctx.drawImage(Img.bullet, 20, 220, swidth, sheight, x - swidth/2, y - sheight/2, swidth, sheight);
         }
        
         Bullet.list[self.id] = self;       
@@ -100,8 +124,11 @@
     }
     Bullet.list = {};
    
-   
+    var selfId = null;
+
     socket.on('init',function(data){   
+        if(data.selfId)
+            selfId = data.selfId;
         //{ player : [{id:123,number:'1',x:0,y:0},{id:1,number:'2',x:0,y:0}], bullet: []}
         for(var i = 0 ; i < data.player.length; i++){
             new Player(data.player[i]);
@@ -112,6 +139,8 @@
     });
    
     socket.on('update',function(data){
+        if(data.selfId)
+            selfId = data.selfId;
         //{ player : [{id:123,x:0,y:0},{id:1,x:0,y:0}], bullet: []}
         for(var i = 0 ; i < data.player.length; i++){
             var pack = data.player[i];
@@ -150,12 +179,29 @@
     });
    
     setInterval(function(){
-        ctx.clearRect(0,0,width,height;
+        if(!selfId)
+            return;
+        ctx.clearRect(0,0,width,height);
+        drawMap();
+        drawScore();
         for(var i in Player.list)
             Player.list[i].draw();
         for(var i in Bullet.list)
             Bullet.list[i].draw();
     },40);
+
+    var drawMap = function() {
+        var x = width/2 - Player.list[selfId].x;
+        var y = height/2 - Player.list[selfId].y;
+        ctx.drawImage(Img.map, x, y);
+    }
+
+    var drawScore = function() {
+        var x = width/2 - Player.list[selfId].x;
+        var y = height/2 - Player.list[selfId].y;
+        ctx.fillStyle = 'white';
+        ctx.fillText(Player.list[selfId].score, 0, 30);
+    }
    
    
     document.onkeydown = function(event){
